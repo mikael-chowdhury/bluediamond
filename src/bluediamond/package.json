@@ -1,0 +1,17 @@
+{
+  "name": "@rexysaur/bluediamond",
+  "version": "1.0.1",
+  "description": "a library to make data handling in typescript/javascrtipt easier",
+  "main": "./dist/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mikael Chowdhury",
+  "license": "ISC"
+}
