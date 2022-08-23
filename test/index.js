@@ -1,12 +1,14 @@
-const bd = require("@rexysaur/bluediamond")
+const { Project, DataGram, Field, DissapatedField } = require("@rexysaur/bluediamond")
 
-new bd.Project().run(async () => {
-    const datagram = new bd.DataGram()
+new Project().run(async () => {
+    const dg = new DataGram()
 
-    const table = new bd.Table()
-    await table.fromSAS("./data.sas7bdat")
-    table.appendToDataGramMatrix(datagram)
+    dg.addField(new DissapatedField("test1", "test12345", "test12"))
+    dg.addField(new DissapatedField("test24", "test123", "test6422"))
+    
+    const result = await dg.build()
 
-    const res = await datagram.build()
-    return res
+    console.log(result)
+
+    return result 
 })

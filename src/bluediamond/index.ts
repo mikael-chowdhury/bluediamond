@@ -1,6 +1,6 @@
 export * from "./lib/DataGram";
 export * from "./lib/DissapatedField";
-export * from "./lib/DissipatedFieldArray";
+export * from "./lib/DissapatedFieldArray";
 export * from "./lib/Field";
 export * from "./lib/FieldArray";
 export * from "./lib/Filter";

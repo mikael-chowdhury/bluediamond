@@ -1,6 +1,6 @@
 {
   "name": "@rexysaur/bluediamond",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "description": "a library to make data handling in typescript/javascrtipt easier",
   "main": "./dist/index.js",
   "publishConfig": {
@@ -13,5 +13,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Mikael Chowdhury",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "0.13.0",
+    "@supercharge/strings": "1.28.0",
+    "sas7bdat": "0.1.7"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.10",
+    "@types/pdfkit": "0.12.6"
+  }
 }

@@ -1,5 +1,5 @@
 import { DissapatedField } from "./DissapatedField";
-import { DissapatedFieldArray } from "./DissipatedFieldArray";
+import { DissapatedFieldArray } from "./DissapatedFieldArray";
 import { Field } from "./Field";
 import process from "process";
 

@@ -5,4 +5,4 @@ A nodejs package with the aim to bring data analysists to javascript
 npm i @rexysaur/bluediamond
 
 ## Documentation
-[View the docs here.](https://)
+[npm package documentation.](https://)
