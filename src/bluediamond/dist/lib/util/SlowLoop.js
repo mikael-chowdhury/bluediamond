@@ -11,13 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 if (!Array.prototype.slowmap) {
     Array.prototype.slowmap = function (func) {
         return __awaiter(this, void 0, void 0, function* () {
+            const modified = [...this];
             let index = 0;
             const loop = () => {
                 return new Promise((res, rej) => __awaiter(this, void 0, void 0, function* () {
-                    const obj = this[index];
+                    const obj = modified[index];
                     const promise = new Promise((resolve) => {
                         setImmediate(() => __awaiter(this, void 0, void 0, function* () {
-                            this[index] = yield func(obj, index, this);
+                            modified[index] = yield func(obj, index, modified);
                             resolve(null);
                         }));
                     });
@@ -29,7 +30,7 @@ if (!Array.prototype.slowmap) {
                 }));
             };
             yield loop();
-            return this;
+            return modified;
         });
     };
 }

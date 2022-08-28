@@ -11,14 +11,22 @@ export class DataGram implements IDataGramMatrix {
     this.matrix.push(field);
   }
 
-  private _getRotatedMatrix(): string[][] {
-    return RotateMatrix(
+  public appendToDataGramMatrix(datagram: DataGram) {
+    this.matrix.forEach((field) => {
+      datagram.addField(field);
+    });
+  }
+
+  private async _getRotatedMatrix(): Promise<string[][]> {
+    const rotated = await RotateMatrix(
       this.matrix.filter((line) => line instanceof DissapatedField)
     );
+
+    return rotated;
   }
 
   private async _getMaxSpaces(): Promise<number[]> {
-    let temp = this._getRotatedMatrix();
+    let temp = await this._getRotatedMatrix();
 
     function getMax(arr: number[]) {
       return arr.reduce((max, v) => (max >= v ? max : v), -Infinity);
@@ -38,35 +46,33 @@ export class DataGram implements IDataGramMatrix {
   private async _spread(_space: number) {
     const max_spaces = await this._getMaxSpaces();
 
-    let final = (
-      await Promise.all(
-        this.matrix.map((line, ln) => {
-          return new Promise((res, rej) => {
-            process.nextTick(() => {
-              res(
-                line instanceof DissapatedField
-                  ? line
-                      .map((word, index, arr) => {
-                        return (
-                          (arr[index - 1]
-                            ? " ".repeat(
-                                max_spaces[index - 1] -
-                                  arr[index - 1].length +
-                                  _space
-                              )
-                            : "") + word
-                        );
-                      })
-                      .join("")
-                  : (line as string[]).join(" ")
-              );
-            });
+    let final = await Promise.all(
+      this.matrix.map((line, ln) => {
+        return new Promise((res, rej) => {
+          process.nextTick(() => {
+            res(
+              line instanceof DissapatedField
+                ? line
+                    .map((word, index, arr) => {
+                      return (
+                        (arr[index - 1]
+                          ? " ".repeat(
+                              max_spaces[index - 1] -
+                                arr[index - 1].length +
+                                _space
+                            )
+                          : "") + word
+                      );
+                    })
+                    .join("")
+                : (line as string[]).join(" ")
+            );
           });
-        })
-      )
-    ).join("\n");
+        });
+      })
+    );
 
-    return final;
+    return final.join("\n");
   }
 
   async build(): Promise<string> {

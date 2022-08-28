@@ -1,6 +1,6 @@
 {
   "name": "@rexysaur/bluediamond",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "a library to make data handling in typescript/javascrtipt easier",
   "main": "./dist/index.js",
   "publishConfig": {
@@ -15,12 +15,27 @@
   "author": "Mikael Chowdhury",
   "license": "ISC",
   "dependencies": {
-    "pdfkit": "0.13.0",
     "@supercharge/strings": "1.28.0",
-    "sas7bdat": "0.1.7"
+    "pdfkit": "^0.13.0",
+    "sas7bdat": "0.1.7",
+    "xmldoc": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.10",
-    "@types/pdfkit": "0.12.6"
-  }
+    "@types/pdfkit": "0.12.6",
+    "@types/xmldoc": "^1.1.6"
+  },
+  "keywords": [
+    "data",
+    "components",
+    "analysis",
+    "typescript"
+  ],
+  "repository": {
+    "url": "https://github.com/mikael-chowdhury/bluediamond"
+  },
+  "bugs": {
+    "url": "https://github.com/mikael-chowdhury/bluediamond/issues"
+  },
+  "homepage": "https://github.com/mikael-chowdhury/bluediamond#readme"
 }

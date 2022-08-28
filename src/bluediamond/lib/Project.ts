@@ -47,5 +47,9 @@ export class Project {
         lines / (elapsed / 1000)
       )} lines per second)`
     );
+
+    setTimeout(() => {
+      process.exit();
+    }, 5000);
   }
 }

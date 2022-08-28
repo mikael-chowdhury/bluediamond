@@ -19,12 +19,20 @@ class DataGram {
     addField(field) {
         this.matrix.push(field);
     }
+    appendToDataGramMatrix(datagram) {
+        this.matrix.forEach((field) => {
+            datagram.addField(field);
+        });
+    }
     _getRotatedMatrix() {
-        return (0, RotateMatrix_1.RotateMatrix)(this.matrix.filter((line) => line instanceof DissapatedField_1.DissapatedField));
+        return __awaiter(this, void 0, void 0, function* () {
+            const rotated = yield (0, RotateMatrix_1.RotateMatrix)(this.matrix.filter((line) => line instanceof DissapatedField_1.DissapatedField));
+            return rotated;
+        });
     }
     _getMaxSpaces() {
         return __awaiter(this, void 0, void 0, function* () {
-            let temp = this._getRotatedMatrix();
+            let temp = yield this._getRotatedMatrix();
             function getMax(arr) {
                 return arr.reduce((max, v) => (max >= v ? max : v), -Infinity);
             }
@@ -39,7 +47,7 @@ class DataGram {
     _spread(_space) {
         return __awaiter(this, void 0, void 0, function* () {
             const max_spaces = yield this._getMaxSpaces();
-            let final = (yield Promise.all(this.matrix.map((line, ln) => {
+            let final = yield Promise.all(this.matrix.map((line, ln) => {
                 return new Promise((res, rej) => {
                     process.nextTick(() => {
                         res(line instanceof DissapatedField_1.DissapatedField
@@ -55,8 +63,8 @@ class DataGram {
                             : line.join(" "));
                     });
                 });
-            }))).join("\n");
-            return final;
+            }));
+            return final.join("\n");
         });
     }
     build() {

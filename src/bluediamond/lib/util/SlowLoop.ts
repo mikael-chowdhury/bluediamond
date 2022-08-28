@@ -2,14 +2,16 @@ if (!Array.prototype.slowmap) {
   Array.prototype.slowmap = async function (
     func: (obj: any, index: number, arr: Array<any>) => any
   ) {
+    const modified = [...this];
+
     let index = 0;
     const loop = () => {
       return new Promise(async (res, rej) => {
-        const obj = this[index];
+        const obj = modified[index];
 
         const promise = new Promise((resolve) => {
           setImmediate(async () => {
-            this[index] = await func(obj, index, this);
+            modified[index] = await func(obj, index, modified);
             resolve(null);
           });
         });
@@ -26,6 +28,6 @@ if (!Array.prototype.slowmap) {
 
     await loop();
 
-    return this;
+    return modified;
   };
 }

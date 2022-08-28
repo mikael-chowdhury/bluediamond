@@ -11,7 +11,7 @@ npm i @rexysaur/bluediamond [options]
 ## Contribution
 We would love to have some contribution to make the library better and more efficient. 
 
-If you are having any issues list them at the [issues page](https://github.com/mikael-chowdhury/bluediamond/issues) on github
+If you are having any issues list them at the [github issues page](https://tinyurl.com/2zu5du2c) on github
 
 <br />
 

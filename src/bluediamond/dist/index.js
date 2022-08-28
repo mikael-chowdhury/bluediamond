@@ -16,7 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./lib/DataGram"), exports);
 __exportStar(require("./lib/DissapatedField"), exports);
-__exportStar(require("./lib/DissipatedFieldArray"), exports);
+__exportStar(require("./lib/DissapatedFieldArray"), exports);
 __exportStar(require("./lib/Field"), exports);
 __exportStar(require("./lib/FieldArray"), exports);
 __exportStar(require("./lib/Filter"), exports);

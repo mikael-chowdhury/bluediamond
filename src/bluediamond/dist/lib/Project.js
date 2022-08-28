@@ -44,6 +44,9 @@ class Project {
             const elapsed = end - start;
             const lines = table.split("\n").length;
             console.log(`Process took ${elapsed}ms to load ${lines} lines of data (~${Math.floor(lines / (elapsed / 1000))} lines per second)`);
+            setTimeout(() => {
+                process.exit();
+            }, 5000);
         });
     }
 }

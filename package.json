@@ -16,11 +16,5 @@
   },
   "devDependencies": {
     "@types/pdfkit": "^0.12.6"
-  },
-  "keywords": [
-    "data",
-    "components",
-    "analysis",
-    "typescript"
-  ]
+  }
 }

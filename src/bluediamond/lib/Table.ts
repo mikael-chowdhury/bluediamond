@@ -28,6 +28,11 @@ export class Table extends DissapatedFieldArray {
     return this;
   }
 
+  public space() {
+    this.rows.push(new DissapatedField(""));
+    return this;
+  }
+
   public applyPreLoadFilter(filter: Filter) {
     const index = this.coloumns.indexOf(filter.type);
 
@@ -44,7 +49,77 @@ export class Table extends DissapatedFieldArray {
     return this;
   }
 
-  public async fromSAS(path: string, exclude: string[] = []): Promise<Table> {
+  public applyFilterSync(filter: Filter) {
+    let i = this.coloumns.indexOf(filter.type);
+    const rows = this.rows.filter((row) => filter.predicate(row[i]));
+
+    return rows;
+  }
+
+  public async getEnumValues(coloumn: string) {
+    const index = this.coloumns.indexOf(coloumn);
+
+    const cols = await this.rows.slowmap((item, i, arr) => {
+      if (item) return item[index];
+
+      return undefined;
+    });
+
+    return Array.from(new Set(cols));
+  }
+
+  public async getColoumnEnumCount(coloumn: string) {
+    const index = this.coloumns.indexOf(coloumn);
+
+    interface LooseObject {
+      [key: string]: any;
+    }
+
+    const data: LooseObject = {};
+
+    await this.rows.slowmap((item) => {
+      if (item) {
+        const _enum = item[index];
+
+        data[_enum] = (data[_enum] || 0) + 1;
+      }
+    });
+
+    return data;
+  }
+
+  public async getValuesFromEnum(
+    coloumn: string,
+    _enums: string[],
+    value: string
+  ) {
+    const index = this.coloumns.indexOf(coloumn);
+    const valueindex = this.coloumns.indexOf(value);
+
+    interface LooseObject {
+      [key: string]: any;
+    }
+
+    const data: LooseObject = {};
+
+    await this.rows.slowmap((item) => {
+      if (item) {
+        if (_enums.includes(item[index])) {
+          const _enum = _enums[_enums.indexOf(item[index])];
+
+          data[_enum] = (data[_enum] || 0) + (parseInt(item[valueindex]) || 0);
+        }
+      }
+    });
+
+    return data;
+  }
+
+  public async fromSAS(
+    path: string,
+    exclude: string[] = [],
+    include: string[] = []
+  ): Promise<Table> {
     const data: any[][] = await SAS7BDAT.parse(path);
     const headers = data[0];
 
@@ -52,7 +127,15 @@ export class Table extends DissapatedFieldArray {
       .map((x) => headers.indexOf(x))
       .filter((x) => x > -1);
 
-    this.coloumns = [...headers.filter((x, i) => !indexedExclude.includes(i))];
+    const indexedInclude = include
+      .map((x) => headers.indexOf(x))
+      .filter((x) => x >= -1);
+
+    this.coloumns = [
+      ...headers.filter(
+        (x, i) => !indexedExclude.includes(i) && indexedInclude.includes(i)
+      ),
+    ];
 
     data.splice(0, 1);
 
@@ -64,19 +147,25 @@ export class Table extends DissapatedFieldArray {
         const promise = new Promise((resolve) => {
           setImmediate(() => {
             if (row) {
-              this.addRow(
-                new DissapatedField(
-                  ...row
-                    .filter((item, itemnum) => {
-                      const filters: Filter[] =
-                        this.preLoadFilters.get(itemnum) || [];
+              if (this.rows.length < this.tableSize) {
+                this.addRow(
+                  new DissapatedField(
+                    ...row
+                      .filter((item, itemnum) => {
+                        const filters: Filter[] =
+                          this.preLoadFilters.get(itemnum) || [];
 
-                      if (filters.every((filter) => filter.predicate(item)))
-                        return !indexedExclude.includes(itemnum);
-                    })
-                    .map((item) => (item != null ? item.toString() : "null"))
-                )
-              );
+                        if (filters.every((filter) => filter.predicate(item)))
+                          return (
+                            !indexedExclude.includes(itemnum) &&
+                            indexedInclude.includes(itemnum)
+                          );
+                      })
+                      .map((item) => (item != null ? item.toString() : "null"))
+                  )
+                );
+              }
+
               resolve(null);
             }
           });
@@ -98,7 +187,10 @@ export class Table extends DissapatedFieldArray {
   }
 
   async build() {
-    this.push(new DissapatedField(...this.coloumns));
+    if (this.coloumns.length > 0) {
+      this.push(new DissapatedField(...this.coloumns));
+    }
+
     this.push(new Field("-".repeat(150)));
 
     await Promise.all(
